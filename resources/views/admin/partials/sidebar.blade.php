@@ -27,9 +27,9 @@
                 <div class="menu-title">CMS</div>
             </a>
             <ul>
-                {{-- <li> <a href="javascript:;"
+                <li> <a href="javascript:;"
                         onclick="showAjaxModal('Create New Page', 'Create', `{{ route('admin.cms.page.create') }}`)"><i
-                            class="bx bx-right-arrow-alt"></i>Create Page</a></li> --}}
+                            class="bx bx-right-arrow-alt"></i>Create Page</a></li>
                 @foreach (getCmsPage() as $pages)
                     <li> <a href="{{ route('admin.cms.index', ['slug' => $pages->page_slug]) }}"><i
                                 class="bx bx-right-arrow-alt"></i>{{ $pages->page_title }}</a></li>

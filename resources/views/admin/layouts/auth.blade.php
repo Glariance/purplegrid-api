@@ -5,6 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!--favicon-->
     <link rel="icon" href="{{ asset('adminassets/images/favicon-32x32.png') }}" type="image/png" />
     <link rel="stylesheet" href="{{ asset('adminassets/plugins/notifications/css/lobibox.min.css') }}" />
@@ -19,7 +20,7 @@
     <title>@yield('title')</title>
 </head>
 
-<body class="bg-theme bg-theme5">
+<body class="bg-theme bg-theme1">
     <!--wrapper-->
     @yield('content')
     <!--end wrapper-->
@@ -82,7 +83,7 @@
             }),
 
 
-            $('#theme1').click(theme1);
+        $('#theme1').click(theme1);
         $('#theme2').click(theme2);
         $('#theme3').click(theme3);
         $('#theme4').click(theme4);

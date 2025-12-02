@@ -1,6 +1,14 @@
 $(function () {
     console.log("Layout page loaded");
 
+    // Attach CSRF token to all AJAX requests
+    const csrf = $('meta[name="csrf-token"]').attr('content');
+    if (csrf) {
+        $.ajaxSetup({
+            headers: { 'X-CSRF-TOKEN': csrf }
+        });
+    }
+
     // Ajax Post Request with Form Data
     window.ajaxPost = function (formSelector, btnSelector, successCallback, errorCallback) {
         $(document).on("submit", formSelector, function (e) {

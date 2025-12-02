@@ -16,7 +16,7 @@
     <title>@yield('title')</title>
 </head>
 
-<body class="bg-theme bg-theme5">
+<body class="bg-theme bg-theme1">
     <!--wrapper-->
     <div class="wrapper">
         <!--sidebar wrapper -->

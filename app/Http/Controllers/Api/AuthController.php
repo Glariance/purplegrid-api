@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Mail\ResetPasswordMail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 
@@ -75,12 +77,10 @@ class AuthController extends Controller
 
         $user = User::where('email', $validated['email'])->first();
 
-        // Always return success to avoid leaking user existence
         if (! $user) {
             return response()->json([
-                'success' => true,
-                'message' => 'If that email exists, a reset link has been generated.',
-            ]);
+                'message' => 'Email not found in our database.',
+            ], 404);
         }
 
         $token = Str::random(64);
@@ -92,6 +92,18 @@ class AuthController extends Controller
                 'created_at' => now(),
             ]
         );
+
+        $resetBase = config('app.frontend_url') ?? config('app.url');
+        $resetUrl = rtrim($resetBase, '/') . '/reset-password?token=' . $token . '&email=' . urlencode($user->email);
+
+        try {
+            Mail::to($user->email)->send(new ResetPasswordMail($user, $resetUrl, $token));
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => 'Could not send reset email. Please try again later.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
 
         // In a real app we would email the token. For this build, return it so the SPA can use it directly.
         return response()->json([
@@ -112,22 +124,22 @@ class AuthController extends Controller
         $record = DB::table('password_reset_tokens')->where('email', $validated['email'])->first();
 
         if (! $record) {
-            return response()->json(['message' => 'Invalid or expired token.'], 422);
+            return response()->json(['message' => 'Email or reset token is invalid or has expired.'], 422);
         }
 
         $createdAt = Carbon::parse($record->created_at);
         if ($createdAt->lt(now()->subMinutes(60))) {
             DB::table('password_reset_tokens')->where('email', $validated['email'])->delete();
-            return response()->json(['message' => 'Reset token expired.'], 422);
+            return response()->json(['message' => 'Email or reset token is invalid or has expired.'], 422);
         }
 
         if (! Hash::check($validated['token'], $record->token)) {
-            return response()->json(['message' => 'Invalid reset token.'], 422);
+            return response()->json(['message' => 'Email or reset token is invalid or has expired.'], 422);
         }
 
         $user = User::where('email', $validated['email'])->first();
         if (! $user) {
-            return response()->json(['message' => 'User not found.'], 404);
+            return response()->json(['message' => 'Email or reset token is invalid or has expired.'], 422);
         }
 
         $user->password = Hash::make($validated['password']);

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'ADMIN' => 1,
+    'ADMIN' => 0,
     'USER' => 1,
 
     'status' => [
