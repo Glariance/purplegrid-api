@@ -40,5 +40,7 @@ For reference, your reset token is:
 If you didn’t request this, you can safely ignore this email.
 
 Thanks,<br>
-{{ config('app.name') }}
+<div style="margin-top: 12px;">
+    <img src="{{ (config('app.url') ? rtrim(config('app.url'), '/') : '') . '/adminassets/images/logo.png' }}" alt="{{ config('app.name') }} logo" style="max-width: 140px;">
+</div>
 @endcomponent

@@ -10,6 +10,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ContactInquiryAdminMail;
+use App\Mail\ContactInquiryUserMail;
 
 class ContactController extends Controller
 {
@@ -78,23 +81,43 @@ class ContactController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
-            'message' => ['required', 'string', 'max:2000'],
+            'company' => ['nullable', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:50'],
+            'service' => ['nullable', 'string', 'max:255'],
+            'message' => ['required', 'string', 'max:2000'],
             'subject' => ['nullable', 'string', 'max:255'],
         ]);
 
-        ContactInquiry::create([
+        $inquiry = ContactInquiry::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'phone' => $validated['phone'] ?? null,
-            'subject' => $validated['subject'] ?? 'Website Inquiry',
+            'company' => $validated['company'] ?? '',
+            'phone' => $validated['phone'] ?? '',
+            'service' => $validated['service'] ?? '',
             'message' => $validated['message'],
+            'subject' => $validated['subject'] ?? 'Website Inquiry',
             'is_read' => 0,
         ]);
+
+        // Send notifications
+        $adminEmail = config('mail.from.address') ?: env('MAIL_FROM_ADDRESS');
+        try {
+            if ($adminEmail) {
+                Mail::to($adminEmail)->send(new ContactInquiryAdminMail($inquiry));
+            }
+            Mail::to($inquiry->email)->send(new ContactInquiryUserMail($inquiry));
+        } catch (\Throwable $e) {
+            report($e);
+            return response()->json([
+                'success' => false,
+                'message' => 'Inquiry saved, but emails could not be sent. Please try again later.',
+            ], 500);
+        }
 
         return response()->json([
             'success' => true,
             'message' => 'Thank you for reaching out. Our team will get back to you shortly.',
+            'data' => $inquiry,
         ], 201);
     }
 

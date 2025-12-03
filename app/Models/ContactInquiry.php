@@ -9,7 +9,7 @@ class ContactInquiry extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['name', 'email', 'phone', 'subject', 'message', 'is_read'];
+    protected $fillable = ['name', 'email', 'phone', 'company', 'service', 'subject', 'message', 'is_read'];
 
     protected $dates = ['deleted_at'];
 }
