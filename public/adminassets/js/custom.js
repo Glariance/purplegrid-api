@@ -19,6 +19,10 @@ $(function () {
             let files = (typeof getSelectedFile === 'function') ? getSelectedFile() : null; // Get file(s) from Dropzone
             const dropzoneArrayField = form.data('dropzoneArrayField') || 'file[]';
             const dropzoneSingleField = form.data('dropzoneSingleField') || 'file';
+            const csrf = $('meta[name="csrf-token"]').attr('content');
+            if (csrf && !formData.has('_token')) {
+                formData.append('_token', csrf);
+            }
             if (files) {
                 if (Array.isArray(files)) {
                     files.forEach((f, i) => {

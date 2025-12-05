@@ -1,111 +1,78 @@
+@php
+    $primary = '#7c3aed';
+    $deep = '#2b0050';
+    $text = '#1f2937';
+    $logo = (config('app.url') ? rtrim(config('app.url'), '/') : '') . '/adminassets/images/logo.png';
+@endphp
+
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
     <title>{{ $subject ?? config('app.name') }}</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f4f4f4;
-            padding: 40px 15px;
+            background: #f4f1fb;
             margin: 0;
+            padding: 24px;
         }
-
-        .email-wrapper {
+        .wrapper {
+            max-width: 700px;
+            margin: 0 auto;
             background: #ffffff;
-            padding: 40px 30px;
-            border-radius: 12px;
-            max-width: 650px;
-            margin: auto;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
         }
-
-        .email-header {
+        .logo {
             text-align: center;
-            margin: -40px -30px 30px -30px;
-            padding: 20px 0;
-            background-color: #000000;
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
+            padding: 20px 0 10px;
+            background: #ffffff;
         }
-
-        .email-header img {
-            max-height: 60px;
-            width: auto;
+        .logo img {
+            max-width: 180px;
+            height: auto;
         }
-
-        .email-body {
-            font-size: 15px;
-            line-height: 1.7;
-            color: #333333;
+        .hero {
+            background: linear-gradient(135deg, {{ $deep }} 0%, {{ $primary }} 100%);
+            color: #f3e8ff;
+            padding: 28px 24px;
         }
-
-        .btn {
-            background-color: #ffffff;
-            color: rgb(0, 0, 0);
-            padding: 12px 24px;
-            text-decoration: none;
-            border-radius: 5px;
-            display: inline-block;
-            margin: 0 0 10px;
-            font-weight: bold;
+        .hero h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 800;
+            color: #ffffff;
         }
-
+        .content {
+            padding: 24px;
+            color: {{ $text }};
+            line-height: 1.6;
+        }
         .footer {
+            padding: 16px 24px 24px;
+            color: #6b7280;
             font-size: 12px;
-            color: #888;
-            margin-top: 40px;
             text-align: center;
-        }
-
-        h2 {
-            color: #222;
-            font-size: 22px;
-            margin-bottom: 20px;
-        }
-
-        .cta-section {
-            text-align: center;
-            margin-top: 40px;
-        }
-
-        .cta-section p {
-            color: #333;
-            font-size: 15px;
         }
     </style>
 </head>
-
 <body>
-    <div class="email-wrapper">
-        <!-- Header Logo -->
-        <div class="email-header">
-            <img src="{{ asset(getSetting('site logo', 'adminassets/images/pureserenity-logo.png')) }}"
-                alt="{{ getSetting('site name', config('app.name')) }} Logo">
+    <div class="wrapper">
+        <div class="logo">
+            <img src="{{ $logo }}" alt="{{ config('app.name') }} logo">
         </div>
-
-        <!-- Email Body Content -->
-        @yield('content')
-
-        <!-- Optional CTA Section -->
-        <div class="cta-section">
-            <p>{{ 'Want to explore more?' }}</p>
-            <a href="{{ url('/') }}" target="_blank" class="btn">{{ 'Click to Visit Site' }}</a>
+        <div class="hero">
+            <h1>{{ $subject ?? config('app.name') }}</h1>
         </div>
-
-        <!-- Footer -->
+        <div class="content">
+            @yield('content')
+        </div>
         <div class="footer">
-            &copy;
-            {{ getSetting('site footer', date('Y') . ' ' . config('app.name') . '. All rights reserved.') }}
-            <div style="margin-top: 10px;">
-                <!-- Optional: social links -->
-                <a href="https://facebook.com"
-                    style="margin: 0 5px; text-decoration: none; color: #3490dc;">Facebook</a> |
-                <a href="https://twitter.com" style="margin: 0 5px; text-decoration: none; color: #3490dc;">Twitter</a>
-            </div>
+            If you have questions, reply to this email and our team will assist.<br>
+            &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
         </div>
     </div>
 </body>
-
 </html>

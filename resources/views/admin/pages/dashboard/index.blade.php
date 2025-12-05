@@ -6,7 +6,7 @@
             <div class="card radius-10">
                 <div class="row">
                     <div class="col-md-8 offset-md-2 text-center mt-5 mb-5">
-                        <img src="{{ asset(getSetting('site header logo', 'adminassets/images/pureserenity-logo.png')) }}"
+                        <img src="{{ asset(getSetting('site header logo', 'adminassets/images/purple-logo.png')) }}"
                             {{-- class="logo-icon" --}} alt="logo icon" width="300">
                         <h1 class="mt-4">Welcome To "<strong>{{ strtoupper(env('APP_NAME')) }}</strong>"</h1>
                     </div>

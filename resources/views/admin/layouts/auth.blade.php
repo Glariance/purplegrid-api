@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!--favicon-->
-    <link rel="icon" href="{{ asset('adminassets/images/favicon-32x32.png') }}" type="image/png" />
+    <link rel="icon" href="{{ asset('adminassets/images/purple-logo.png') }}" type="image/png" />
     <link rel="stylesheet" href="{{ asset('adminassets/plugins/notifications/css/lobibox.min.css') }}" />
     <!-- loader-->
     <link href="{{ asset('adminassets/css/pace.min.css') }}" rel="stylesheet" />

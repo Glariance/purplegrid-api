@@ -1,11 +1,11 @@
 <div class="sidebar-wrapper" data-simplebar="true">
     <div class="sidebar-header">
         <div>
-            <img src="{{ asset(getSetting('site icon', 'adminassets/images/pureserenity-logo.png')) }}" class="logo-icon"
+            <img src="{{ asset(getSetting('site icon', 'adminassets/images/purple-logo.png')) }}" class="logo-icon"
                 alt="logo icon">
         </div>
         <div>
-            <h4 class="logo-text">{{ getSetting('site name', 'PureSerenity') }}</h4>
+            <h4 class="logo-text">{{ getSetting('site name', 'Purple Grid Marketing') }}</h4>
         </div>
         <div class="toggle-icon ms-auto"><i class='bx bx-arrow-to-left'></i>
         </div>
@@ -20,7 +20,7 @@
             </a>
         </li>
 
-        <li>
+        {{-- <li>
             <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon"><i class='fadeIn animated bx bx-folder-plus'></i>
                 </div>
@@ -35,25 +35,25 @@
                                 class="bx bx-right-arrow-alt"></i>{{ $pages->page_title }}</a></li>
                 @endforeach
             </ul>
-        </li>
+        </li> --}}
 
-        <li>
+        {{-- <li>
             <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon"><i class='fadeIn animated bx bx-cart'></i>
                 </div>
                 <div class="menu-title">Inventory</div>
             </a>
             <ul>
-                {{-- <li> <a href="{{ route('admin.inventory.brand.index') }}"><i class="bx bx-right-arrow-alt"></i>Brands</a></li> --}}
+                 <li> <a href="{{ route('admin.inventory.brand.index') }}"><i class="bx bx-right-arrow-alt"></i>Brands</a></li> 
                 <li> <a href="{{ route('admin.inventory.category.index') }}"><i
                             class="bx bx-right-arrow-alt"></i>Category</a></li>
-                {{-- <li> <a href="{{ route('admin.inventory.attributes.index') }}"><i class="bx bx-right-arrow-alt"></i>Attributes & Option</a></li> --}}
+                 <li> <a href="{{ route('admin.inventory.attributes.index') }}"><i class="bx bx-right-arrow-alt"></i>Attributes & Option</a></li> 
                 <li> <a href="{{ route('admin.inventory.product.create') }}"><i
                             class="bx bx-right-arrow-alt"></i>Create Product</a></li>
                 <li> <a href="{{ route('admin.inventory.product.index') }}"><i
                             class="bx bx-right-arrow-alt"></i>Products</a></li>
             </ul>
-        </li>
+        </li> --}}
 
 
         <li>
@@ -88,16 +88,23 @@
                     <a href="{{ route('admin.contact-inquiry.index') }}">
                         <div class="parent-icon"><i class='bx bx-cookie'></i>
                         </div>
-                        <div class="menu-title">Contact Inquries</div>
-                    </a>
+                    <div class="menu-title">Contact Inquries</div>
+                  </a>
                 </li>
                 <li>
+                  <a href="{{ route('admin.users.index') }}">
+                      <div class="parent-icon"><i class='bx bx-user'></i>
+                      </div>
+                      <div class="menu-title">Users</div>
+                  </a>
+                </li>
+                {{-- <li>
                     <a href="{{ route('admin.newsletter-management.index') }}">
                         <div class="parent-icon"><i class='bx bx-cookie'></i>
                         </div>
                         <div class="menu-title">Newsletter Management</div>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </li>
 

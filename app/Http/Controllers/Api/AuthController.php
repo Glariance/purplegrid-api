@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Mail\ResetPasswordMail;
+use App\Mail\UserRegisteredAdminMail;
+use App\Mail\UserRegisteredUserMail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -37,6 +39,17 @@ class AuthController extends Controller
 
         $user->remember_token = $token;
         $user->save();
+
+        // Send notifications
+        $adminEmail = config('mail.from.address') ?: env('MAIL_FROM_ADDRESS');
+        try {
+            if ($adminEmail) {
+                Mail::to($adminEmail)->send(new UserRegisteredAdminMail($user));
+            }
+            Mail::to($user->email)->send(new UserRegisteredUserMail($user));
+        } catch (\Throwable $e) {
+            report($e);
+        }
 
         return response()->json([
             'token' => $token,

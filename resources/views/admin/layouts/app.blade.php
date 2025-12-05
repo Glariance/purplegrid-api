@@ -8,7 +8,7 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!--favicon-->
-    <link rel="icon" href="{{ asset(getSetting('site fav icon', 'adminassets/images/favicon-32x32.png')) }}"
+    <link rel="icon" href="{{ asset(getSetting('site fav icon', 'adminassets/images/purple-logo.png')) }}"
         type="image/png" />
 
     @include('admin.partials.styles')

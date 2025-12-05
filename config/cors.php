@@ -13,6 +13,8 @@ return [
         'http://127.0.0.1:8000',
     ],
     'allowed_origins_patterns' => [
+        '/^https?:\\/\\/(www\\.)?purplegridmarketing\\.com$/',
+        '/^https?:\\/\\/admin\\.purplegridmarketing\\.com$/',
         '/^http:\\/\\/localhost:\\d+$/',
         '/^http:\\/\\/127\\.0\\.0\\.1:\\d+$/',
     ],

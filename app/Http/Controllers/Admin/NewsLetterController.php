@@ -149,14 +149,14 @@ class NewsLetterController extends Controller
     {
         // Basic validation for common fields
         $validated = $request->validate([
-            'type' => 'required|in:newsletter,contact',
+            'type' => 'required|in:newsletter,contact,user',
             'subject' => 'required|string|max:255',
             'message' => 'required|string',
         ]);
 
         // Determine emails based on type
         $emails = match ($validated['type']) {
-            'contact' => collect($request->validate([
+            'contact', 'user' => collect($request->validate([
                 'emails' => 'required|array|min:1',
                 'emails.*' => 'required|email|distinct|not_in:select_all',
             ])['emails'])->unique(),
@@ -194,7 +194,7 @@ class NewsLetterController extends Controller
         return response()->json([
             'success' => $validated['type'] === 'newsletter'
                 ? 'Newsletter sent successfully!'
-                : 'Contact inquiry response sent successfully!',
+                : 'Message sent successfully!',
             'failed' => $failed,
         ]);
     }

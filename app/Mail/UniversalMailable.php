@@ -44,7 +44,7 @@ class UniversalMailable extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: $this->view,
+            markdown: $this->view,
         );
     }
 

@@ -32,3 +32,8 @@ Route::get('/me', [AuthController::class, 'me']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+
+// Preflight handler for CORS
+Route::options('/{any}', function () {
+    return response()->noContent();
+})->where('any', '.*');

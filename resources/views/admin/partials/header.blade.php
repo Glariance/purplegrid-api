@@ -344,14 +344,20 @@
                     </li>
                 </ul> --}}
             </div>
+            @php
+                $user = Auth::user();
+                $userImage = $user && $user->image ? $user->image : 'adminassets/images/no-image.png';
+                $userName = $user?->name ?? 'Guest';
+                $userRole = strtoupper($user->role->name ?? 'USER');
+            @endphp
             <div class="user-box dropdown">
                 <a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#"
                     role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="{{ asset((Auth::user()->image)? Auth::user()->image : 'adminassets/images/no-image.png') }}" class="user-img"
+                    <img src="{{ asset($userImage) }}" class="user-img"
                         alt="user avatar">
                     <div class="user-info ps-3">
-                        <p class="user-name mb-0">{{Auth::user()->name}}</p>
-                        <p class="designattion mb-0">{{strtoupper(Auth::user()->role->name)}}</p>
+                        <p class="user-name mb-0">{{ $userName }}</p>
+                        <p class="designattion mb-0">{{ $userRole }}</p>
                     </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
