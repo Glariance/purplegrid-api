@@ -7,9 +7,11 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\AboutController;
 use App\Http\Controllers\Api\PetController;
 use App\Http\Controllers\Api\PrivacyController;
+use App\Http\Controllers\Api\AmazonFormController;
 use App\Http\Controllers\Admin\NewsLetterController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Log;
 
 
 
@@ -21,6 +23,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/contact/page', [ContactController::class, 'show']);
 Route::get('/privacy', [PrivacyController::class, 'show']);
 Route::post('/contact', [ContactController::class, 'store']);
+Route::post('/amazon-form', [AmazonFormController::class, 'store']);
+
 // Route::get('/home', [HomeController::class, 'show']);
 // Route::get('/about', [AboutController::class, 'show']);
 // Route::post('/newsletter', [NewsLetterController::class, 'subscribe']);
@@ -33,7 +37,8 @@ Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
-// Preflight handler for CORS
-Route::options('/{any}', function () {
+// Preflight handler for CORS (must be last - only matches OPTIONS requests that don't match other routes)
+Route::options('/{any}', function ($any) {
+    Log::info('OPTIONS catch-all matched', ['path' => $any]);
     return response()->noContent();
 })->where('any', '.*');

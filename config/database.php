@@ -57,9 +57,28 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
+            'options' => (function () {
+                // Only run if pdo_mysql is available
+                if (! extension_loaded('pdo_mysql')) {
+                    return [];
+                }
+
+                $options = [];
+
+                // Only set SSL option if env value exists and is non-empty
+                $sslCa = env('MYSQL_ATTR_SSL_CA');
+                if ($sslCa) {
+                    // Prefer the legacy named constant if already defined (our shim), otherwise use the PHP 8.5 class constant if available
+                    if (defined('PDO::MYSQL_ATTR_SSL_CA')) {
+                        $options[PDO::MYSQL_ATTR_SSL_CA] = $sslCa;
+                    } elseif (class_exists(\Pdo\Mysql::class)) {
+                        $options[\Pdo\Mysql::ATTR_SSL_CA] = $sslCa;
+                    }
+                }
+
+                return array_filter($options);
+            })(),
+
         ],
 
         'mariadb' => [
@@ -77,9 +96,26 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
+            'options' => (function () {
+                if (! extension_loaded('pdo_mysql')) {
+                    return [];
+                }
+
+                $options = [];
+
+                $sslCa = env('MYSQL_ATTR_SSL_CA');
+
+                if ($sslCa) {
+                    if (defined('PDO::MYSQL_ATTR_SSL_CA')) {
+                        $options[PDO::MYSQL_ATTR_SSL_CA] = $sslCa;
+                    } elseif (class_exists(\Pdo\Mysql::class)) {
+                        $options[\Pdo\Mysql::ATTR_SSL_CA] = $sslCa;
+                    }
+                }
+
+                return array_filter($options);
+            })(),
+
         ],
 
         'pgsql' => [
@@ -147,7 +183,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
             'persistent' => env('REDIS_PERSISTENT', false),
         ],
 
