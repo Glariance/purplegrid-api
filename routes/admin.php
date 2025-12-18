@@ -87,6 +87,8 @@ Route::middleware(['auth', 'role:'.config('constants.ADMIN')])->group(function (
     Route::resource('newsletter-management', NewsLetterController::class);
 
     Route::resource('contact-inquiry', ContactInquiryController::class);
+    Route::get('contact-inquiry/amazon/{id}', [ContactInquiryController::class, 'showAmazon'])->name('contact-inquiry.show-amazon');
+    Route::delete('contact-inquiry/amazon/{id}', [ContactInquiryController::class, 'destroyAmazon'])->name('contact-inquiry.destroy-amazon');
     Route::resource('users', UserController::class)->only(['index', 'show', 'destroy']);
 
     Route::resource('tags', TagController::class);

@@ -36,6 +36,7 @@
                         <thead>
                             <tr>
                                 <th>S.no</th>
+                                <th>Type</th>
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Subject</th>
@@ -70,6 +71,7 @@
                         <tfoot>
                             <tr>
                                 <th>S.no</th>
+                                <th>Type</th>
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Subject</th>
@@ -110,6 +112,7 @@
                     pageLength: 25, // 👈 Default per page
                     columns: [
                         { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                        { data: 'type', name: 'type', orderable: false, searchable: false },
                         { data: 'name', name: 'name' },
                         { data: 'email', name: 'email' },
                         { data: 'subject', name: 'subject' },
@@ -125,6 +128,14 @@
             }
 
             function deleteInquiry(id, url) {
+                confirmDelete(() => {
+                    handleAjaxRequest(url, function() {
+                        loadDatatable()
+                    });
+                });
+            }
+
+            function deleteAmazonInquiry(id, url) {
                 confirmDelete(() => {
                     handleAjaxRequest(url, function() {
                         loadDatatable()

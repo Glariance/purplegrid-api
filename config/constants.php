@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'ADMIN' => 0,
+    'ADMIN' => 2,  // Updated to match actual role_id in database
     'USER' => 1,
 
     'status' => [

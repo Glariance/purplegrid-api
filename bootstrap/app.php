@@ -46,7 +46,13 @@ return Application::configure(basePath: dirname(__DIR__))
 
         
         $middleware->redirectUsersTo(function (Request $request) {
-            return $request->user()->isAdmin()
+            // Always return a string path - the controller will handle AJAX requests
+            $user = $request->user();
+            if (!$user) {
+                return '/home';
+            }
+            
+            return $user->isAdmin()
                 ? 'admin/dashboard'
                 : '/home';
         });

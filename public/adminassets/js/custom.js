@@ -19,10 +19,29 @@ $(function () {
             let files = (typeof getSelectedFile === 'function') ? getSelectedFile() : null; // Get file(s) from Dropzone
             const dropzoneArrayField = form.data('dropzoneArrayField') || 'file[]';
             const dropzoneSingleField = form.data('dropzoneSingleField') || 'file';
-            const csrf = $('meta[name="csrf-token"]').attr('content');
-            if (csrf && !formData.has('_token')) {
-                formData.append('_token', csrf);
+            
+            // Get CSRF token from form's hidden input (created by @csrf)
+            // This is the most reliable source as it's tied to the current session
+            let csrf = form.find('input[name="_token"]').val();
+            
+            // Fallback to meta tag if form input not found
+            if (!csrf) {
+                csrf = $('meta[name="csrf-token"]').attr('content');
             }
+            
+            if (!csrf) {
+                console.error('CSRF token not found! Check if @csrf is in the form and meta tag exists.');
+                errorMessage('CSRF token missing. Please refresh the page and try again.');
+                return false;
+            }
+            
+            // CRITICAL: Always use the token from the form's hidden input
+            // FormData should already have it, but we'll ensure it's set correctly
+            formData.set('_token', csrf);
+            
+            // Debug: Log what we're sending
+            console.log('CSRF Token being sent:', csrf.substring(0, 15) + '...');
+            console.log('FormData _token value:', formData.get('_token') ? formData.get('_token').substring(0, 15) + '...' : 'MISSING');
             if (files) {
                 if (Array.isArray(files)) {
                     files.forEach((f, i) => {
@@ -32,13 +51,25 @@ $(function () {
                     formData.append(dropzoneSingleField, files);
                 }
             }
+            // Log cookies being sent (for debugging)
+            console.log('Cookies:', document.cookie);
+            
             $.ajax({
                 url: actionUrl,
                 type: "POST",
                 data: formData,
                 processData: false,
                 contentType: false,
-                beforeSend: function () {
+                xhrFields: {
+                    withCredentials: true
+                },
+                headers: {
+                    'X-CSRF-TOKEN': csrf || $('meta[name="csrf-token"]').attr('content'),
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                beforeSend: function (xhr) {
+                    // Ensure cookies are sent
+                    xhr.withCredentials = true;
                     progressLoad();
                     // form.find("button[type=submit]").prop("disabled", true);
                     $(btnSelector).prop("disabled", true);

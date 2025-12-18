@@ -68,11 +68,22 @@
         <script>
             $(document).ready(function() {
                 bindPasswordToggle();
+                
+                // Ensure session cookie is available
+                console.log('Session cookie:', document.cookie);
+                console.log('CSRF token from form:', $('#loginForm input[name="_token"]').val());
+                console.log('CSRF token from meta:', $('meta[name="csrf-token"]').attr('content'));
+                
                 ajaxPost("#loginForm", "#loginBtn", function(response) {
                     successMessage(response.success);
                     window.location.href = response.redirect_to;
                 }, function(xhr) {
                     // error code here
+                    if (xhr.status === 419) {
+                        console.error('CSRF token mismatch. Refreshing page...');
+                        // Optionally refresh the page to get a new token
+                        // window.location.reload();
+                    }
                 });
 
             });
