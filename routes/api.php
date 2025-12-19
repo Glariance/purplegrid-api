@@ -24,6 +24,7 @@ Route::get('/contact/page', [ContactController::class, 'show']);
 Route::get('/privacy', [PrivacyController::class, 'show']);
 Route::post('/contact', [ContactController::class, 'store']);
 Route::post('/amazon-form', [AmazonFormController::class, 'store']);
+Route::post('/ai-influencer-form', [\App\Http\Controllers\Api\AiInfluencerFormController::class, 'store']);
 
 // Route::get('/home', [HomeController::class, 'show']);
 // Route::get('/about', [AboutController::class, 'show']);

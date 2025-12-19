@@ -11,10 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            // Allow longer Amazon URLs
-            $table->string('amazon_link', 2048)->nullable()->change();
-        });
+        // Only run if products table exists
+        if (Schema::hasTable('products')) {
+            Schema::table('products', function (Blueprint $table) {
+                // Check if amazon_link column exists before modifying
+                if (Schema::hasColumn('products', 'amazon_link')) {
+                    // Allow longer Amazon URLs
+                    $table->string('amazon_link', 2048)->nullable()->change();
+                }
+            });
+        }
     }
 
     /**
@@ -22,9 +28,15 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            // Revert to default string length
-            $table->string('amazon_link', 255)->nullable()->change();
-        });
+        // Only run if products table exists
+        if (Schema::hasTable('products')) {
+            Schema::table('products', function (Blueprint $table) {
+                // Check if amazon_link column exists before modifying
+                if (Schema::hasColumn('products', 'amazon_link')) {
+                    // Revert to default string length
+                    $table->string('amazon_link', 255)->nullable()->change();
+                }
+            });
+        }
     }
 };
